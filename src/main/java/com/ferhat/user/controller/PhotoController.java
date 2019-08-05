@@ -1,8 +1,10 @@
 package com.ferhat.user.controller;
 
-
 import com.ferhat.user.entity.Album;
+import com.ferhat.user.entity.Photo;
+import com.ferhat.user.model.AlbumWithDetail;
 import com.ferhat.user.service.AlbumService;
+import com.ferhat.user.service.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -14,38 +16,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/userAlbums")
-public class AlbumController {
+@RequestMapping("/userAlbumsWithDetails")
+public class PhotoController {
 
+	private PhotoService photoService;
 	private AlbumService albumService;
 
 	@Autowired
-	public AlbumController(AlbumService albumService) {
+	public PhotoController(PhotoService photoService, AlbumService albumService) {
+		this.photoService = photoService;
 		this.albumService = albumService;
 	}
 
 	@PostMapping("/create")
-	public void createAlbums(@RequestBody @Valid List<Album> albumList,
+	public void createPhotos(@RequestBody @Valid List<Photo> photoList,
 	                         BindingResult bindingResult,
 	                         HttpServletResponse httpServletResponse) throws IOException {
 		if (bindingResult.hasErrors()) {
 			httpServletResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameters invalid..");
 		} else {
-			albumService.createAlbums(albumList);
+			photoService.createPhotos(photoList);
 		}
 	}
 
 	@PutMapping()
-	public List<Album> findByUserId_Q4(@RequestParam(value = "id") String id) {
-		List<Album> albumList = new ArrayList<>();
+	public AlbumWithDetail findByUserId_Q5(@RequestParam(value = "userId") String userId) {
+		AlbumWithDetail albumWithDetail = new AlbumWithDetail();
+		List<Album> albumList;
+		List<Photo> photoList;
 		try {
-			albumList = albumService.findByUserId(id);
+			albumList = albumService.findByUserId(userId);
 			if (albumList == null || albumList.isEmpty()) {
-				throw new Exception("Sisteme kayıtlı album bulunamadı.");
+				throw new Exception("Sisteme kayıtlı album ve resim bulunamadı.");
+			}else {
+				photoList = photoService.findByAlbumId(albumList.get(0).getId());
+				albumWithDetail.setAlbumList(albumList);
+				albumWithDetail.setPhotoList(photoList);
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		return albumList;
+		return albumWithDetail;
 	}
 }
