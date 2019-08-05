@@ -5,8 +5,8 @@ import com.ferhat.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,6 +30,23 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User findByEmailAddress(String email) {
 		return userRepository.findByEmail(email);
+	}
+
+	@Override
+	public List<User> findByEmailsAddress(String emails) {
+		if (emails != null) {
+			String[] emailList = emails.split(",");
+			List<User> userList = new ArrayList<>();
+			for (String email : emailList) {
+				User user = userRepository.findByEmail(email);
+				if (user != null) {
+					userList.add(user);
+				}
+
+			}
+			return userList;
+		}
+		return null;
 	}
 
 }
