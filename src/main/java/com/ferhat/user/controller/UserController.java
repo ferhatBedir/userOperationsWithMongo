@@ -17,26 +17,40 @@ import java.util.List;
 public class UserController {
 
 
-	private UserService userService;
+    private UserService userService;
 
 
-	@Autowired
-	public UserController(UserService userService) {
-		this.userService = userService;
-	}
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
-	@PostMapping("/create")
-	public void createUsers(@RequestBody @Valid List<User> userList, BindingResult bindingResult, HttpServletResponse httpServletResponse) throws IOException {
-		if (bindingResult.hasErrors()) {
-			httpServletResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameters invalid..");
-		} else {
-			userService.createUser(userList);
-		}
-	}
+    @PostMapping("/create")
+    public void createUsers(@RequestBody @Valid List<User> userList, BindingResult bindingResult, HttpServletResponse httpServletResponse) throws IOException {
+        if (bindingResult.hasErrors()) {
+            httpServletResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameters invalid..");
+        } else {
+            userService.createUser(userList);
+        }
+    }
 
-	@GetMapping("/allUsers")
-	public List<User> findAllUsers(){
-		return userService.findAllUsers();
-	}
+    @GetMapping("/allUsers")
+    public List<User> findAllUsers_Q1() {
+        return userService.findAllUsers();
+    }
 
+    @PostMapping("/email")
+    public User findByUserEmail_Q2(@RequestParam(value = "email") String email) {
+        User user = null;
+        try {
+            user = userService.findByEmailAddress(email);
+            if (user == null) {
+                throw new Exception("Sisteme kayıtlı email adresi bulunamadı.");
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return user;
+    }
 }
