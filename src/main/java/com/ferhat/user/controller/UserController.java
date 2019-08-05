@@ -4,6 +4,8 @@ package com.ferhat.user.controller;
 import com.ferhat.user.entity.User;
 import com.ferhat.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
+@Component
 public class UserController {
 
 
@@ -69,5 +72,10 @@ public class UserController {
 			System.out.println(e.getMessage());
 		}
 		return userList;
+	}
+
+	@Scheduled(fixedRate = 10000)
+	private void log(){
+		System.out.println("deneme deneme;");
 	}
 }
