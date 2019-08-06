@@ -1,23 +1,11 @@
 package com.ferhat.user.model;
 
-import javax.xml.crypto.Data;
 import java.util.Date;
 
 public class LogModel {
 
+	private Integer requestCount = 0;
 	private String requestType;
-	private Integer requestCount;
-	private Date date;
-	private String RequestParam;
-
-
-	public String getRequestType() {
-		return requestType;
-	}
-
-	public void setRequestType(String requestType) {
-		this.requestType = requestType;
-	}
 
 	public Integer getRequestCount() {
 		return requestCount;
@@ -27,20 +15,12 @@ public class LogModel {
 		this.requestCount = requestCount;
 	}
 
-	public String getRequestParam() {
-		return RequestParam;
+	public String getRequestType() {
+		return requestType;
 	}
 
-	public void setRequestParam(String requestParam) {
-		RequestParam = requestParam;
-	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
+	public void setRequestType(String requestType) {
+		this.requestType = requestType;
 	}
 
 	@Override
